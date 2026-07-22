@@ -5,50 +5,6 @@ import { db } from "@/lib/db";
 import { analyticsEvents } from "@/lib/db/schema";
 import { analyticsSchema } from "@/lib/validation";
 
-function getSafeErrorCode(error: unknown): string {
-  let current: unknown = error;
-
-  for (let depth = 0; depth < 5 && current && typeof current === "object"; depth += 1) {
-    const candidate = current as { code?: unknown; cause?: unknown };
-    if (typeof candidate.code === "string" && /^[A-Z0-9_]+$/.test(candidate.code)) {
-      return candidate.code;
-    }
-    current = candidate.cause;
-  }
-
-  return "UNKNOWN";
-}
-
-function getDatabaseConfigKind(): "missing" | "localhost" | "ipv4-loopback" | "remote" | "invalid" {
-  const value = process.env.DATABASE_URL;
-  if (!value) return "missing";
-
-  try {
-    const host = new URL(value).hostname;
-    if (host === "localhost") return "localhost";
-    if (host === "127.0.0.1") return "ipv4-loopback";
-    return "remote";
-  } catch {
-    return "invalid";
-  }
-}
-
-function getSafeDatabaseOrigin(error: unknown): string | null {
-  let current: unknown = error;
-
-  for (let depth = 0; depth < 5 && current && typeof current === "object"; depth += 1) {
-    const candidate = current as { message?: unknown; sqlMessage?: unknown; cause?: unknown };
-    for (const value of [candidate.sqlMessage, candidate.message]) {
-      if (typeof value !== "string") continue;
-      const match = /Access denied for user '[^']+'@'([A-Za-z0-9:._%-]+)'/.exec(value);
-      if (match) return match[1];
-    }
-    current = candidate.cause;
-  }
-
-  return null;
-}
-
 function deviceFrom(request: Request): "mobile" | "tablet" | "desktop" {
   const ua = request.headers.get("user-agent") ?? "";
   if (/ipad|tablet/i.test(ua)) return "tablet";
@@ -64,14 +20,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Analytics event failed", error);
-    return NextResponse.json(
-      {
-        ok: false,
-        code: getSafeErrorCode(error),
-        databaseConfig: getDatabaseConfigKind(),
-        databaseOrigin: getSafeDatabaseOrigin(error),
-      },
-      { status: 500 },
-    );
+    return NextResponse.json({ ok: false }, { status: 500 });
   }
 }
