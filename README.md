@@ -14,12 +14,12 @@ Landing page i prywatny panel operacyjny zbudowane w Next.js 16. Aplikacja wymag
 
 ## Wdrożenie na Hostinger Application Hosting
 
-- Build command: `npm run db:migrate && npm run build`
+- Build command: `npm run build` (automatycznie wykonuje migracje i tworzy brakujące konto administratora)
 - Start command: `npm run start`
 - Runtime: aktualne Node.js LTS
 - Health check: `/`
 
-Ustaw wszystkie zmienne z `.env.example` w panelu Hostingera. `BETTER_AUTH_URL` musi wskazywać finalny adres HTTPS, np. `https://crevis.pl`. Przed migracją produkcyjną wykonaj kopię bazy. Dla skrzynki `kontakt@crevis.pl` skonfiguruj SPF, DKIM i DMARC.
+Ustaw wszystkie zmienne z `.env.example` w panelu Hostingera. `BETTER_AUTH_URL` musi wskazywać finalny adres HTTPS, np. `https://crevis.pl`. Przed migracją produkcyjną wykonaj kopię bazy. Dla Gmaila włącz weryfikację dwuetapową i użyj osobnego hasła aplikacji jako `SMTP_PASSWORD`; nie wpisuj zwykłego hasła do konta Google.
 
 ## Kontrole
 

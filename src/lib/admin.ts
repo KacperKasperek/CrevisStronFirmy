@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 
 export async function getAdminSession() {
   const current = await auth.api.getSession({ headers: await headers() });
-  const adminEmail = (process.env.ADMIN_EMAIL ?? "kontakt@crevis.pl").toLowerCase();
+  const adminEmail = (process.env.ADMIN_EMAIL ?? "office.crevis@gmail.com").toLowerCase();
   if (!current || current.user.email.toLowerCase() !== adminEmail) return null;
   return current;
 }

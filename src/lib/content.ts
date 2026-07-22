@@ -41,8 +41,8 @@ export const defaultSiteContent: SiteContent = {
       { q: "Jak długo trwa projekt?", a: "Prosta strona to zwykle 1–2 tygodnie, a bardziej rozbudowane projekty 4–6 tygodni. Termin ustalamy po poznaniu potrzeb." },
       { q: "Czy oferujecie wsparcie?", a: "Tak. Po wdrożeniu zapewniamy wsparcie techniczne, aktualizacje i pomoc w rozwoju strony." },
       { q: "Jakie są koszty?", a: "Wycena zależy od zakresu projektu. Skontaktuj się z nami, a przygotujemy bezpłatną wycenę." },
-      { q: "Jak mogę się skontaktować?", a: "Napisz na kontakt@crevis.pl lub skorzystaj z formularza. Odpowiadamy w ciągu jednego dnia roboczego." },
+      { q: "Jak mogę się skontaktować?", a: "Napisz na office.crevis@gmail.com lub skorzystaj z formularza. Odpowiadamy w ciągu jednego dnia roboczego." },
     ],
   },
-  contact: { title: "Gotowy,\nby zacząć?", description: "Nie czekaj, Twój projekt może zacząć się już dziś. Napisz do nas, a odezwiemy się w ciągu jednego dnia roboczego.", email: "kontakt@crevis.pl", phone: "+48 519 523 768" },
+  contact: { title: "Gotowy,\nby zacząć?", description: "Nie czekaj, Twój projekt może zacząć się już dziś. Napisz do nas, a odezwiemy się w ciągu jednego dnia roboczego.", email: "office.crevis@gmail.com", phone: "+48 519 523 768" },
 };
