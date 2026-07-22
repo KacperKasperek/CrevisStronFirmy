@@ -1,0 +1,3 @@
+import Link from "next/link";
+import { ResetForm } from "@/components/admin/ResetPassword";
+export default async function ResetPasswordPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) { const { token } = await searchParams; return <main className="grid min-h-screen place-items-center bg-ink px-5"><section className="w-full max-w-md border-t-8 border-rust bg-paper p-8"><h1 className="display text-4xl">Nowe hasło</h1>{token ? <ResetForm token={token} /> : <p className="mt-6 text-red-700">Brak tokenu resetującego.</p>}<Link href="/panel/login" className="mt-6 block text-sm text-rust">← Powrót do logowania</Link></section></main>; }

@@ -1,0 +1,3 @@
+import { describe, expect, it } from "vitest";
+import { analyticsReport } from "./analytics-report";
+describe("analyticsReport", () => { it("calculates sessions and conversion", () => { const base = { id: "1", path: "/", label: null, referrerHost: null, source: null, medium: null, campaign: null, device: "desktop" as const, createdAt: new Date() }; const report = analyticsReport([{ ...base, event: "page_view", sessionId: "a" }, { ...base, id: "2", event: "form_submit", sessionId: "a" }, { ...base, id: "3", event: "page_view", sessionId: "b" }]); expect(report.sessions).toBe(2); expect(report.conversion).toBe(50); }); });

@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: #0d0d0d;
+  --color-paper: #ffffff;
+  --color-rust: #bd4a2b;
+  --color-rust-dark: #a23d22;
+  --color-mist: #f2f2f2;
+  --font-display: var(--font-archivo-black);
+  --font-sans: var(--font-archivo);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  /* sticky nav is ~72px; keep anchored headings clear of it */
+  scroll-padding-top: 6rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  text-wrap: pretty;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Heavy display headings, tight tracking like the brand wordmark */
+.display {
+  font-family: var(--font-display), Arial, sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+}
+
+.form-field {
+  width: 100%;
+  border-radius: 0.75rem;
+  background: rgb(255 255 255 / 0.1);
+  padding: 0.75rem 1rem;
+  color: white;
+  outline: none;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.15);
+}
+.form-field:focus { box-shadow: inset 0 0 0 2px var(--color-rust); }
+
+.admin-field {
+  width: 100%; border: 1px solid rgb(13 13 13 / .15); background: white; padding: .7rem .85rem; outline: none;
+}
+.admin-field:focus { border-color: var(--color-rust); box-shadow: 0 0 0 3px rgb(189 74 43 / .12); }

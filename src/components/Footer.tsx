@@ -1,0 +1,6 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { SiteContent } from "@/lib/content";
+export default function Footer({ contact }: { contact: SiteContent["contact"] }) {
+  return <footer className="bg-ink px-6 pb-6 pt-16 text-paper sm:px-10"><div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-3"><div><Image src="/img/logo-rust.png" alt="CREVIS" width={150} height={32} className="h-7 w-auto" /><p className="mt-6 text-paper/80">Tel: {contact.phone}</p><p className="text-paper/80">Email: <a href={`mailto:${contact.email}`} className="hover:text-rust">{contact.email}</a></p></div><nav aria-label="Informacje" className="grid content-start gap-2"><Link href="/polityka-prywatnosci" className="text-paper/85 hover:text-rust">Polityka prywatności</Link><a href="#faq" className="text-paper/85 hover:text-rust">FAQ</a></nav><nav aria-label="Media społecznościowe" className="grid content-start gap-2"><a href="#" className="text-paper/85 hover:text-rust">Instagram</a><a href="#" className="text-paper/85 hover:text-rust">Facebook</a></nav></div><div className="mx-auto mt-14 max-w-7xl border-t border-paper/10 pt-5 text-center"><Link href="/panel" className="text-xs tracking-[.2em] text-paper/35 transition hover:text-rust">Crevis 2026 ©</Link></div></footer>;
+}
