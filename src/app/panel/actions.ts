@@ -1,7 +1,7 @@
 "use server";
 import { createHash, randomBytes, randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/admin";
@@ -15,6 +15,7 @@ const date = (value: FormDataEntryValue | null) => value ? new Date(String(value
 export async function saveContentAction(formData: FormData) {
   const current = await requireAdmin(); const parsed = siteContentSchema.parse(JSON.parse(String(formData.get("content")))); const now = new Date();
   await db.insert(siteContent).values({ id: "main", content: parsed, updatedBy: current.user.id, createdAt: now, updatedAt: now }).onDuplicateKeyUpdate({ set: { content: parsed, updatedBy: current.user.id, updatedAt: now } });
+  updateTag("site-content");
   revalidatePath("/"); revalidatePath("/panel/content");
 }
 export async function updateMessageAction(formData: FormData) {

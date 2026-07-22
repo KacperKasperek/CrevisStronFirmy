@@ -10,7 +10,7 @@ import SeoJsonLd from "@/components/SeoJsonLd";
 import { getSiteContent } from "@/lib/content-server";
 import { SEO_DESCRIPTION, SEO_TITLE, SITE_NAME, SITE_URL } from "@/lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: { absolute: SEO_TITLE },
