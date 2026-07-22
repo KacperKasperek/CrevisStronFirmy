@@ -3,9 +3,10 @@ import { createHash, randomBytes, randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { z } from "zod";
 import { requireAdmin } from "@/lib/admin";
 import { db } from "@/lib/db";
-import { contactMessages, milestones, projectShares, projects, siteContent, tasks } from "@/lib/db/schema";
+import { analyticsEvents, contactMessages, milestones, projectShares, projects, siteContent, tasks } from "@/lib/db/schema";
 import { siteContentSchema } from "@/lib/content";
 import { projectSchema } from "@/lib/validation";
 import { sendContactEmails } from "@/lib/mail";
@@ -35,6 +36,21 @@ export async function createProjectAction(formData: FormData) {
 export async function updateProjectAction(formData: FormData) {
   await requireAdmin(); const id = String(formData.get("id")); const values = projectSchema.parse(Object.fromEntries(formData));
   await db.update(projects).set({ name: values.name, clientName: values.clientName, clientEmail: values.clientEmail || null, status: values.status, progress: values.progress, startsAt: date(formData.get("startsAt")), dueAt: date(formData.get("dueAt")), internalNote: values.internalNote || null, publicSummary: values.publicSummary || null, updatedAt: new Date() }).where(eq(projects.id, id)); revalidatePath(`/panel/projects/${id}`); revalidatePath("/panel/projects");
+}
+export async function deleteProjectAction(formData: FormData) {
+  await requireAdmin();
+  const id = z.string().uuid().parse(formData.get("id"));
+  await db.delete(projects).where(eq(projects.id, id));
+  revalidatePath("/panel/projects");
+  revalidatePath("/panel");
+}
+export async function resetAnalyticsAction(formData: FormData) {
+  await requireAdmin();
+  z.literal("RESET").parse(formData.get("confirmation"));
+  await db.delete(analyticsEvents);
+  revalidatePath("/panel/analytics");
+  revalidatePath("/panel/settings");
+  revalidatePath("/panel");
 }
 export async function addMilestoneAction(formData: FormData) {
   await requireAdmin(); const projectId = String(formData.get("projectId")); await db.insert(milestones).values({ id: randomUUID(), projectId, title: String(formData.get("title")), description: String(formData.get("description") ?? ""), status: "pending", isPublic: formData.get("isPublic") === "on", position: Number(formData.get("position") ?? 0), dueAt: date(formData.get("dueAt")), createdAt: new Date(), updatedAt: new Date() }); revalidatePath(`/panel/projects/${projectId}`);
