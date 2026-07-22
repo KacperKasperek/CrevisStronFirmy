@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
-export const metadata = { title: "Polityka prywatności | Crevis" };
+import { SITE_URL } from "@/lib/seo";
+
+export const metadata: Metadata = {
+  title: "Polityka prywatności",
+  description: "Zasady przetwarzania danych osobowych i wykorzystywania analityki w serwisie Crevis.",
+  alternates: { canonical: `${SITE_URL}/polityka-prywatnosci` },
+};
 export default function PrivacyPage() { return <main className="min-h-screen bg-mist px-6 py-16"><article className="mx-auto max-w-3xl bg-paper p-8 shadow-sm sm:p-12"><Link href="/" className="text-sm font-bold text-rust">← Wróć do strony</Link><h1 className="display mt-8 text-4xl">Polityka prywatności</h1><div className="mt-8 space-y-5 leading-relaxed text-ink/75"><p>Administratorem danych jest Crevis. Kontakt w sprawach danych osobowych: office.crevis@gmail.com.</p><p>Dane przekazane w formularzu wykorzystujemy wyłącznie do obsługi zapytania i dalszej korespondencji. Podanie danych jest dobrowolne, ale konieczne do otrzymania odpowiedzi.</p><p>Po wyrażeniu zgody zapisujemy anonimowy identyfikator sesji, odsłony, źródło wejścia, rodzaj urządzenia i interakcje z formularzem. Nie zapisujemy surowego adresu IP ani pełnego ciągu User-Agent. Dane analityczne usuwamy po 13 miesiącach.</p><p>Możesz odmówić analityki w banerze zgody. Masz prawo dostępu do danych, sprostowania, usunięcia, ograniczenia przetwarzania oraz wniesienia skargi do organu nadzorczego.</p><p>Dane są przetwarzane przez dostawców hostingu i poczty niezbędnych do działania serwisu. Szczegółową listę podmiotów i podstawy prawne należy uzupełnić zgodnie z zawartymi umowami przed publikacją.</p></div></article></main>; }

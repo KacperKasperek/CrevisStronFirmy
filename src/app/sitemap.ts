@@ -1,9 +1,20 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/seo";
 
 export const dynamic = "force-static";
 
-const SITE_URL = "https://crevis.pl"; // ← zmień na właściwą domenę
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [{ url: SITE_URL, changeFrequency: "monthly", priority: 1 }];
+  return [
+    {
+      url: SITE_URL,
+      changeFrequency: "weekly",
+      priority: 1,
+      images: [`${SITE_URL}/img/hero.png`],
+    },
+    {
+      url: `${SITE_URL}/polityka-prywatnosci`,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+  ];
 }

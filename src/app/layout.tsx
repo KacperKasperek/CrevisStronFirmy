@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo, Archivo_Black } from "next/font/google";
 import "./globals.css";
 import Analytics from "@/components/Analytics";
+import { SEO_DESCRIPTION, SEO_TITLE, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -15,30 +16,47 @@ const archivoBlack = Archivo_Black({
   weight: "400",
 });
 
-const SITE_URL = "https://crevis.pl"; // ← zmień na właściwą domenę
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Crevis",
-  description:
-    "Crevis to studio webdev. Projektujemy i wdrażamy szybkie, responsywne strony internetowe oraz grafikę dla firm.",
-  alternates: { canonical: "/" },
+  title: { default: SEO_TITLE, template: `%s | ${SITE_NAME}` },
+  description: SEO_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "technology",
+  keywords: [
+    "strony internetowe",
+    "projektowanie stron internetowych",
+    "tworzenie stron www",
+    "strony internetowe dla firm",
+    "sklepy internetowe",
+    "web design",
+    "Crevis",
+  ],
+  formatDetection: { email: false, address: false, telephone: false },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "pl_PL",
-    url: SITE_URL,
-    siteName: "Crevis",
-    title: "Crevis",
-    description:
-      "Studio webdev. Projektujemy i wdrażamy szybkie, responsywne strony internetowe oraz grafikę dla firm.",
-    images: [{ url: "/img/hero.png", width: 1200, height: 630, alt: "CREVIS" }],
+    siteName: SITE_NAME,
+    title: SEO_TITLE,
+    description: SEO_DESCRIPTION,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Crevis",
-    description:
-      "Studio webdev. Szybkie, responsywne strony internetowe oraz grafika dla firm.",
-    images: ["/img/hero.png"],
+    title: SEO_TITLE,
+    description: SEO_DESCRIPTION,
   },
 };
 
