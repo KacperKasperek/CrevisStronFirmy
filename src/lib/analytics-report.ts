@@ -1,0 +1,4 @@
+import type { InferSelectModel } from "drizzle-orm";
+import type { analyticsEvents } from "@/lib/db/schema";
+type Row = InferSelectModel<typeof analyticsEvents>;
+export function analyticsReport(rows: Row[]) { const sessions = new Set(rows.map((r) => r.sessionId)).size; const count = (event: Row["event"]) => rows.filter((r) => r.event === event).length; const group = (key: "device" | "referrerHost" | "label") => Object.entries(rows.reduce<Record<string, number>>((acc, row) => { const value = row[key] || "bez danych"; acc[value] = (acc[value] ?? 0) + 1; return acc; }, {})).sort((a, b) => b[1] - a[1]); const views = count("page_view"); const submissions = count("form_submit"); return { views, sessions, submissions, formStarts: count("form_start"), conversion: sessions ? Math.round(submissions / sessions * 1000) / 10 : 0, devices: group("device"), sources: group("referrerHost"), labels: group("label") }; }

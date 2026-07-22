@@ -1,3 +1,38 @@
+# Crevis
+
+Landing page i prywatny panel operacyjny zbudowane w Next.js 16. Aplikacja wymaga środowiska Node.js oraz MySQL; nie jest już statycznym eksportem.
+
+## Konfiguracja lokalna
+
+1. Skopiuj `.env.example` do `.env.local` i uzupełnij dostęp do MySQL, SMTP oraz sekrety.
+2. Zainstaluj pakiety: `npm install`.
+3. Uruchom migracje: `npm run db:migrate`.
+4. Utwórz jedyne konto administratora: `npm run admin:create`.
+5. Uruchom aplikację: `npm run dev`, zaloguj się przez `/panel` i od razu skonfiguruj 2FA.
+
+`ADMIN_PASSWORD` jest potrzebne tylko przy tworzeniu konta. Po wykonaniu skryptu usuń tę zmienną z konfiguracji produkcyjnej.
+
+## Wdrożenie na Hostinger Application Hosting
+
+- Build command: `npm run db:migrate && npm run build`
+- Start command: `npm run start`
+- Runtime: aktualne Node.js LTS
+- Health check: `/`
+
+Ustaw wszystkie zmienne z `.env.example` w panelu Hostingera. `BETTER_AUTH_URL` musi wskazywać finalny adres HTTPS, np. `https://crevis.pl`. Przed migracją produkcyjną wykonaj kopię bazy. Dla skrzynki `kontakt@crevis.pl` skonfiguruj SPF, DKIM i DMARC.
+
+## Kontrole
+
+```bash
+npm run lint
+npm test
+npm run build
+```
+
+Panel zawiera wiadomości, statystyki, CMS tekstowy, projekty, etapy, Kanban i odwoływalne linki statusowe dla klientów.
+
+---
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

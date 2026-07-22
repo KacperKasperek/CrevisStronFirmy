@@ -1,0 +1,3 @@
+import LoginForm from "@/components/admin/LoginForm";
+import { ResetRequest } from "@/components/admin/ResetPassword";
+export default function LoginPage() { return <main className="grid min-h-screen place-items-center bg-ink px-5 py-12 text-ink"><section className="w-full max-w-md border-t-8 border-rust bg-paper p-8 shadow-2xl"><p className="font-mono text-xs uppercase tracking-[.25em] text-rust">Prywatna strefa</p><h1 className="display mt-3 text-4xl">Crevis Control</h1><p className="mt-3 text-sm text-ink/60">Dostęp wyłącznie dla administratora.</p><LoginForm /><ResetRequest /></section></main>; }

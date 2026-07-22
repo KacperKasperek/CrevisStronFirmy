@@ -1,0 +1,10 @@
+import { loadEnvConfig } from "@next/env";
+loadEnvConfig(process.cwd());
+process.env.ALLOW_ADMIN_BOOTSTRAP = "true";
+const email = process.env.ADMIN_EMAIL;
+const password = process.env.ADMIN_PASSWORD;
+if (!email || !password || password.length < 12) throw new Error("Ustaw ADMIN_EMAIL i ADMIN_PASSWORD (minimum 12 znaków).");
+const { auth } = await import("../src/lib/auth");
+const result = await auth.api.signUpEmail({ body: { name: "Administrator Crevis", email, password } });
+console.log(`Utworzono administratora: ${result.user.email}. Zaloguj się i skonfiguruj 2FA.`);
+process.exit(0);
