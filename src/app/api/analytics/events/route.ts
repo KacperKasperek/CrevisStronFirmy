@@ -18,5 +18,10 @@ export async function POST(request: Request) {
     await db.insert(analyticsEvents).values({ id: randomUUID(), ...parsed.data, device: deviceFrom(request), createdAt: now });
     if (Math.random() < 0.01) await db.delete(analyticsEvents).where(lt(analyticsEvents.createdAt, new Date(now.getTime() - 395 * 86_400_000)));
     return NextResponse.json({ ok: true });
-  } catch { return NextResponse.json({ ok: false }, { status: 500 }); }
+  } catch (error) {
+    console.error("Analytics event failed", error);
+    const rawCode = (error as { code?: unknown }).code;
+    const code = typeof rawCode === "string" && /^[A-Z0-9_]+$/.test(rawCode) ? rawCode : "UNKNOWN";
+    return NextResponse.json({ ok: false, code }, { status: 500 });
+  }
 }
