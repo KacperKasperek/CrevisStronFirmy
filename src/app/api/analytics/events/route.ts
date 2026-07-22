@@ -33,6 +33,22 @@ function getDatabaseConfigKind(): "missing" | "localhost" | "ipv4-loopback" | "r
   }
 }
 
+function getSafeDatabaseOrigin(error: unknown): string | null {
+  let current: unknown = error;
+
+  for (let depth = 0; depth < 5 && current && typeof current === "object"; depth += 1) {
+    const candidate = current as { message?: unknown; sqlMessage?: unknown; cause?: unknown };
+    for (const value of [candidate.sqlMessage, candidate.message]) {
+      if (typeof value !== "string") continue;
+      const match = /Access denied for user '[^']+'@'([A-Za-z0-9:._%-]+)'/.exec(value);
+      if (match) return match[1];
+    }
+    current = candidate.cause;
+  }
+
+  return null;
+}
+
 function deviceFrom(request: Request): "mobile" | "tablet" | "desktop" {
   const ua = request.headers.get("user-agent") ?? "";
   if (/ipad|tablet/i.test(ua)) return "tablet";
@@ -49,7 +65,12 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Analytics event failed", error);
     return NextResponse.json(
-      { ok: false, code: getSafeErrorCode(error), databaseConfig: getDatabaseConfigKind() },
+      {
+        ok: false,
+        code: getSafeErrorCode(error),
+        databaseConfig: getDatabaseConfigKind(),
+        databaseOrigin: getSafeDatabaseOrigin(error),
+      },
       { status: 500 },
     );
   }
