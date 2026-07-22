@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export default async function SettingsPage() {
   const current = await requireAdmin({ allowTwoFactorSetup: true });
   const enabled = Boolean((current.user as typeof current.user & { twoFactorEnabled?: boolean }).twoFactorEnabled);
-  const [{ total }] = await db.select({ total: db.$count(analyticsEvents) }).from(analyticsEvents);
+  const total = await db.$count(analyticsEvents);
 
   return <PanelShell title="Ustawienia">
     <div className="grid max-w-3xl gap-6">
