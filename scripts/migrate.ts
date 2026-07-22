@@ -3,13 +3,14 @@ import { readdir, readFile } from "fs/promises";
 import { resolve } from "path";
 import mysql from "mysql2/promise";
 import { loadEnvConfig } from "@next/env";
+import { parseMysqlConnectionString } from "../src/lib/db/connection-config";
 
 export async function migrate() {
   loadEnvConfig(process.cwd());
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("Brak DATABASE_URL.");
 
-  const connection = await mysql.createConnection(url);
+  const connection = await mysql.createConnection(parseMysqlConnectionString(url));
   try {
     await connection.execute("CREATE TABLE IF NOT EXISTS `_crevis_migrations` (`name` varchar(255) PRIMARY KEY, `checksum` varchar(64) NOT NULL, `applied_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP)");
     const directory = resolve(process.cwd(), "drizzle");
