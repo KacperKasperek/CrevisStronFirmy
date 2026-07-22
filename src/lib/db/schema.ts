@@ -29,6 +29,9 @@ export const verification = mysqlTable("verification", {
 export const twoFactor = mysqlTable("two_factor", {
   id: varchar("id", { length: 36 }).primaryKey(), secret: text("secret").notNull(), backupCodes: text("backup_codes").notNull(),
   userId: varchar("user_id", { length: 36 }).notNull().references(() => user.id, { onDelete: "cascade" }),
+  verified: boolean("verified").notNull().default(true),
+  failedVerificationCount: int("failed_verification_count").notNull().default(0),
+  lockedUntil: datetime("locked_until", { mode: "date" }),
 }, (t) => [uniqueIndex("two_factor_user_idx").on(t.userId)]);
 
 export const contactMessages = mysqlTable("contact_messages", {
