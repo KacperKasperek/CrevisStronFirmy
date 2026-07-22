@@ -19,6 +19,20 @@ function getSafeErrorCode(error: unknown): string {
   return "UNKNOWN";
 }
 
+function getDatabaseConfigKind(): "missing" | "localhost" | "ipv4-loopback" | "remote" | "invalid" {
+  const value = process.env.DATABASE_URL;
+  if (!value) return "missing";
+
+  try {
+    const host = new URL(value).hostname;
+    if (host === "localhost") return "localhost";
+    if (host === "127.0.0.1") return "ipv4-loopback";
+    return "remote";
+  } catch {
+    return "invalid";
+  }
+}
+
 function deviceFrom(request: Request): "mobile" | "tablet" | "desktop" {
   const ua = request.headers.get("user-agent") ?? "";
   if (/ipad|tablet/i.test(ua)) return "tablet";
@@ -34,6 +48,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Analytics event failed", error);
-    return NextResponse.json({ ok: false, code: getSafeErrorCode(error) }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, code: getSafeErrorCode(error), databaseConfig: getDatabaseConfigKind() },
+      { status: 500 },
+    );
   }
 }
