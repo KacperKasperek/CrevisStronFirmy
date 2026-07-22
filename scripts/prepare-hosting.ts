@@ -8,8 +8,13 @@ async function main() {
     return;
   }
 
-  await import("./migrate");
-  await import("./create-admin");
+  const { migrate } = await import("./migrate");
+  await migrate();
+  const { createAdmin } = await import("./create-admin");
+  await createAdmin();
 }
 
-void main();
+void main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
