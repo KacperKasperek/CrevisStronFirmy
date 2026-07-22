@@ -5,6 +5,20 @@ import { db } from "@/lib/db";
 import { analyticsEvents } from "@/lib/db/schema";
 import { analyticsSchema } from "@/lib/validation";
 
+function getSafeErrorCode(error: unknown): string {
+  let current: unknown = error;
+
+  for (let depth = 0; depth < 5 && current && typeof current === "object"; depth += 1) {
+    const candidate = current as { code?: unknown; cause?: unknown };
+    if (typeof candidate.code === "string" && /^[A-Z0-9_]+$/.test(candidate.code)) {
+      return candidate.code;
+    }
+    current = candidate.cause;
+  }
+
+  return "UNKNOWN";
+}
+
 function deviceFrom(request: Request): "mobile" | "tablet" | "desktop" {
   const ua = request.headers.get("user-agent") ?? "";
   if (/ipad|tablet/i.test(ua)) return "tablet";
@@ -20,8 +34,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   } catch (error) {
     console.error("Analytics event failed", error);
-    const rawCode = (error as { code?: unknown }).code;
-    const code = typeof rawCode === "string" && /^[A-Z0-9_]+$/.test(rawCode) ? rawCode : "UNKNOWN";
-    return NextResponse.json({ ok: false, code }, { status: 500 });
+    return NextResponse.json({ ok: false, code: getSafeErrorCode(error) }, { status: 500 });
   }
 }
