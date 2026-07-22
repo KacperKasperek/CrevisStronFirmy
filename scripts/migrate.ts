@@ -5,6 +5,22 @@ import mysql from "mysql2/promise";
 import { loadEnvConfig } from "@next/env";
 import { parseMysqlConnectionString } from "../src/lib/db/connection-config";
 
+function checksum(value: string) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+export function migrationChecksums(sql: string) {
+  const normalizedSql = sql.replace(/\r\n/g, "\n");
+
+  return {
+    canonical: checksum(normalizedSql),
+    accepted: new Set([
+      checksum(normalizedSql),
+      checksum(normalizedSql.replace(/\n/g, "\r\n")),
+    ]),
+  };
+}
+
 export async function migrate() {
   loadEnvConfig(process.cwd());
   const url = process.env.DATABASE_URL;
@@ -18,10 +34,13 @@ export async function migrate() {
 
     for (const name of files) {
       const sql = await readFile(resolve(directory, name), "utf8");
-      const checksum = createHash("sha256").update(sql).digest("hex");
+      const checksums = migrationChecksums(sql);
       const [rows] = await connection.execute<mysql.RowDataPacket[]>("SELECT checksum FROM `_crevis_migrations` WHERE name = ?", [name]);
       if (rows[0]) {
-        if (rows[0].checksum !== checksum) throw new Error(`Migracja ${name} została zmieniona po zastosowaniu.`);
+        if (!checksums.accepted.has(rows[0].checksum)) throw new Error(`Migracja ${name} została zmieniona po zastosowaniu.`);
+        if (rows[0].checksum !== checksums.canonical) {
+          await connection.execute("UPDATE `_crevis_migrations` SET checksum = ? WHERE name = ?", [checksums.canonical, name]);
+        }
         continue;
       }
 
@@ -35,7 +54,7 @@ export async function migrate() {
             if ((error as { code?: string }).code !== "ER_TABLE_EXISTS_ERROR") throw error;
           }
         }
-        await connection.execute("INSERT INTO `_crevis_migrations` (name, checksum) VALUES (?, ?)", [name, checksum]);
+        await connection.execute("INSERT INTO `_crevis_migrations` (name, checksum) VALUES (?, ?)", [name, checksums.canonical]);
         await connection.commit();
         console.log(`Zastosowano ${name}`);
       } catch (error) {
