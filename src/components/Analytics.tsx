@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { isAdminPanelPath } from "@/lib/analytics-path";
 
 type EventName = "page_view" | "cta_click" | "form_start" | "form_submit";
 const consentKey = "crevis-analytics-consent";
@@ -7,6 +8,7 @@ function sessionId() { let id = sessionStorage.getItem("crevis-session"); if (!i
 export function track(event: EventName, label?: string) {
   if (typeof window === "undefined" || localStorage.getItem(consentKey) !== "yes") return;
   const url = new URL(window.location.href); let referrerHost: string | undefined;
+  if (isAdminPanelPath(url.pathname)) return;
   try { referrerHost = document.referrer ? new URL(document.referrer).hostname : undefined; } catch { referrerHost = undefined; }
   void fetch("/api/analytics/events", { method: "POST", headers: { "content-type": "application/json" }, keepalive: true,
     body: JSON.stringify({ event, label, sessionId: sessionId(), path: `${url.pathname}${url.search}`, referrerHost, source: url.searchParams.get("utm_source") ?? undefined, medium: url.searchParams.get("utm_medium") ?? undefined, campaign: url.searchParams.get("utm_campaign") ?? undefined }) });

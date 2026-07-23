@@ -1,4 +1,5 @@
 import { requireAdmin } from "@/lib/admin";
+import { excludeAdminPanelActivity } from "@/lib/analytics-query";
 import { db } from "@/lib/db";
 import { analyticsEvents } from "@/lib/db/schema";
 import PanelShell from "@/components/admin/PanelShell";
@@ -10,7 +11,7 @@ export const dynamic = "force-dynamic";
 export default async function SettingsPage() {
   const current = await requireAdmin({ allowTwoFactorSetup: true });
   const enabled = Boolean((current.user as typeof current.user & { twoFactorEnabled?: boolean }).twoFactorEnabled);
-  const total = await db.$count(analyticsEvents);
+  const total = await db.$count(analyticsEvents, excludeAdminPanelActivity());
 
   return <PanelShell title="Ustawienia">
     <div className="grid max-w-3xl gap-6">
