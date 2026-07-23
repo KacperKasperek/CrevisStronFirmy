@@ -11,7 +11,7 @@ export async function sendContactEmails(data: { name: string; email: string; mes
   const to = process.env.CONTACT_TO ?? "office.crevis@gmail.com";
   const tx = transporter();
   await tx.sendMail({ from: `Crevis <${from}>`, to, replyTo: data.email, subject: `Nowe zapytanie od ${safeEmailSubject(data.name)}`, text: `Imię: ${data.name}\nE-mail: ${data.email}\n\n${data.message}`, html: contactNotificationHtml(data) });
-  await tx.sendMail({ from: `Crevis <${from}>`, to: data.email, replyTo: to, subject: "Otrzymaliśmy Twoją wiadomość — Crevis", text: `Cześć ${data.name},\n\ndziękujemy za wiadomość. Odezwiemy się w ciągu jednego dnia roboczego.\n\nZespół Crevis`, html: contactConfirmationHtml(data) });
+  await tx.sendMail({ from: `Crevis <${from}>`, to: data.email, replyTo: to, subject: "Otrzymaliśmy Twoją wiadomość — Crevis", text: `Dzień dobry ${data.name},\n\ndziękujemy za wiadomość. Odezwiemy się w ciągu jednego dnia roboczego.\n\nZespół Crevis`, html: contactConfirmationHtml(data) });
 }
 
 export async function sendResetEmail(email: string, url: string) {

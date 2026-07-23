@@ -87,7 +87,7 @@ export function contactConfirmationHtml(data: { name: string }) {
     preview: "Dziękujemy — otrzymaliśmy Twoją wiadomość.",
     marker: "01 / Wiadomość przyjęta",
     title: "Dziękujemy za kontakt",
-    content: `<p style="margin:0;font-size:18px;line-height:29px">Cześć <strong>${name}</strong>,</p>
+    content: `<p style="margin:0;font-size:18px;line-height:29px">Dzień dobry <strong>${name}</strong>,</p>
       <p style="margin:16px 0 0;font-size:16px;line-height:26px;color:${colors.muted}">Twoja wiadomość jest już u nas. Zapoznamy się ze szczegółami i odpowiemy w ciągu jednego dnia roboczego.</p>
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin-top:30px;border-collapse:collapse">
         <tr><td style="width:36px;padding:15px 0;border-top:1px solid #dddddd;font-family:Courier New,monospace;font-weight:bold;color:${colors.rust}">01</td><td style="padding:15px 0;border-top:1px solid #dddddd;font-size:14px;font-weight:bold">Analizujemy wiadomość</td></tr>
