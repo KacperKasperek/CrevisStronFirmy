@@ -1,7 +1,14 @@
 import { z } from "zod";
 
 const featureSchema = z.object({ title: z.string().min(2).max(120), text: z.string().min(10).max(500) });
-const planSchema = z.object({ name: z.string().min(2).max(60), price: z.string().min(1).max(30), featured: z.boolean(), features: z.array(z.string().min(2).max(180)).min(1).max(15), cta: z.string().min(2).max(60) });
+const planSchema = z.object({
+  name: z.string().min(2).max(60),
+  price: z.string().min(1).max(30),
+  billingLabel: z.string().min(1).max(40).default("zł/mies."),
+  featured: z.boolean(),
+  features: z.array(z.string().min(2).max(180)).min(1).max(15),
+  cta: z.string().min(2).max(60),
+});
 const faqSchema = z.object({ q: z.string().min(3).max(180), a: z.string().min(10).max(1000) });
 
 export const siteContentSchema = z.object({
@@ -28,9 +35,9 @@ export const defaultSiteContent: SiteContent = {
   offer: {
     title: "Nasza oferta",
     plans: [
-      { name: "Start", price: "249", featured: false, cta: "Rozpocznij", features: ["Strona One Page", "Hosting i SSL", "Podłączenie domeny", "Formularz kontaktowy", "Podstawowe SEO", "Kopie zapasowe", "Zmiany do 30 minut miesięcznie"] },
-      { name: "Biznes", price: "349", featured: true, cta: "Rozpocznij", features: ["Do 5 podstron", "Wszystko z pakietu Start", "Integracja z Google Analytics", "Optymalizacja wydajności", "Priorytetowe wsparcie", "Zmiany do 1 godziny miesięcznie"] },
-      { name: "Premium", price: "499", featured: false, cta: "Skontaktuj się", features: ["Nielimitowana liczba podstron", "Blog", "Zaawansowane SEO", "Landing Page", "Miesięczny raport", "Zmiany do 2 godzin miesięcznie"] },
+      { name: "Start", price: "249", billingLabel: "zł/mies.", featured: false, cta: "Rozpocznij", features: ["Strona One Page", "Hosting i SSL", "Podłączenie domeny", "Formularz kontaktowy", "Podstawowe SEO", "Kopie zapasowe", "Zmiany do 30 minut miesięcznie"] },
+      { name: "Biznes", price: "349", billingLabel: "zł/mies.", featured: true, cta: "Rozpocznij", features: ["Do 5 podstron", "Wszystko z pakietu Start", "Integracja z Google Analytics", "Optymalizacja wydajności", "Priorytetowe wsparcie", "Zmiany do 1 godziny miesięcznie"] },
+      { name: "Premium", price: "499", billingLabel: "zł/mies.", featured: false, cta: "Skontaktuj się", features: ["Nielimitowana liczba podstron", "Blog", "Zaawansowane SEO", "Landing Page", "Miesięczny raport", "Zmiany do 2 godzin miesięcznie"] },
     ],
     included: ["Brak opłaty na start", "Hosting w cenie", "Certyfikat SSL", "Kopie zapasowe", "Aktualizacje i utrzymanie", "Wsparcie techniczne"],
   },
