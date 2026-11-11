@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/prepare-hosting.ts && tsx scripts/clean-next.ts && next build",
+    "build": "tsx scripts/prepare-hosting.ts && tsx scripts/clean-next.ts && next build --webpack",
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
