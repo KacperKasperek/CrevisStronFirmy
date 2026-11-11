@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const links = [
-  { label: "Kontakt", href: "#kontakt" },
-  { label: "Oferta", href: "#oferta" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Oferta", href: "/#oferta" },
+  { label: "Portfolio", href: "/#portfolio" },
+  { label: "FAQ", href: "/#faq" },
+  { label: "Kontakt", href: "/#kontakt" },
 ];
 
 export default function Nav() {
@@ -29,7 +31,7 @@ export default function Nav() {
   return (
     <header className="sticky top-0 z-50 bg-ink">
       <nav className="relative mx-auto flex max-w-7xl items-center justify-between px-6 py-4 sm:px-10 md:py-5" aria-label="Główna nawigacja">
-        <a href="#top" aria-label="CREVIS - strona główna" className="shrink-0">
+        <Link href="/#top" aria-label="CREVIS - strona główna" className="shrink-0">
           <Image
             src="/img/logo-white.png"
             alt="CREVIS"
@@ -38,16 +40,16 @@ export default function Nav() {
             priority
             className="h-6 w-auto sm:h-7"
           />
-        </a>
-        <ul className="hidden items-center gap-12 md:flex">
+        </Link>
+        <ul className="hidden items-center gap-7 lg:gap-10 md:flex">
           {links.map((l) => (
             <li key={l.href}>
-              <a
+              <Link
                 href={l.href}
                 className="text-sm font-bold text-paper transition-colors hover:text-rust sm:text-lg"
               >
                 {l.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -72,9 +74,9 @@ export default function Nav() {
         >
           <ul className="grid py-5">
             {links.map((link, index) => <li key={link.href} className="border-b border-paper/10 last:border-none">
-              <a href={link.href} onClick={() => setOpen(false)} className="flex items-center justify-between py-5 text-2xl font-bold text-paper focus:outline-none focus-visible:text-rust">
+              <Link href={link.href} onClick={() => setOpen(false)} className="flex items-center justify-between py-5 text-2xl font-bold text-paper focus:outline-none focus-visible:text-rust">
                 <span>{link.label}</span><span className="font-mono text-xs text-rust">0{index + 1}</span>
-              </a>
+              </Link>
             </li>)}
           </ul>
         </div>

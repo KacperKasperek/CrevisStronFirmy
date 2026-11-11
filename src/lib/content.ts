@@ -13,6 +13,10 @@ export const siteContentSchema = z.object({
 });
 export type SiteContent = z.infer<typeof siteContentSchema>;
 
+export function getPlanBillingLabel(planName: string) {
+  return planName.trim().toLocaleLowerCase("pl-PL") === "sama strona" ? "zł" : "zł/mies.";
+}
+
 export const defaultSiteContent: SiteContent = {
   hero: { title: "Twój sukces\nzaczyna się tutaj", description: "Tworzymy strony, które przyciągają klientów i budują zaufanie do Twojej marki." },
   why: {
