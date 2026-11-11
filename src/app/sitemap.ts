@@ -12,6 +12,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       images: [`${SITE_URL}/img/hero.png`],
     },
     {
+      url: `${SITE_URL}/portfolio`,
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
       url: `${SITE_URL}/polityka-prywatnosci`,
       changeFrequency: "yearly",
       priority: 0.2,

@@ -6,6 +6,7 @@ import DlaczegoMy from "@/components/DlaczegoMy";
 import Faq from "@/components/Faq";
 import Cta from "@/components/Cta";
 import Footer from "@/components/Footer";
+import PortfolioSection from "@/components/PortfolioSection";
 import SeoJsonLd from "@/components/SeoJsonLd";
 import { getSiteContent } from "@/lib/content-server";
 import { SEO_DESCRIPTION, SEO_TITLE, SITE_NAME, SITE_URL } from "@/lib/seo";
@@ -29,5 +30,5 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const content = await getSiteContent();
-  return <><SeoJsonLd content={content} /><Nav /><main className="flex-1"><Hero content={content.hero} /><DlaczegoMy content={content.why} /><Oferta content={content.offer} /><Faq content={content.faq} /><Cta content={content.contact} /></main><Footer contact={content.contact} /></>;
+  return <><SeoJsonLd content={content} /><Nav /><main className="flex-1"><Hero content={content.hero} /><DlaczegoMy content={content.why} /><Oferta content={content.offer} /><PortfolioSection /><Faq content={content.faq} /><Cta content={content.contact} /></main><Footer contact={content.contact} /></>;
 }
